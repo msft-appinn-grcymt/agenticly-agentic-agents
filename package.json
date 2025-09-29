@@ -13,9 +13,11 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test:ui": "playwright test",
+    "test:ui:azure": "playwright test --config=playwright-azure.config.js",
     "test:ui:headed": "playwright test --headed",
     "test:ui:debug": "playwright test --debug",
-    "validate:setup": "node scripts/validate-setup.js"
+    "validate:setup": "node scripts/validate-setup.js",
+    "validate:azure": "node scripts/validate-azure-config.js"
   },
   "dependencies": {
     "react": "^19.1.1",
