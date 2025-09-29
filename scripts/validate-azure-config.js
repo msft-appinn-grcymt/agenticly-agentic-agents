@@ -6,7 +6,7 @@
  * are properly set for Azure Playwright Testing service integration.
  */
 
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
