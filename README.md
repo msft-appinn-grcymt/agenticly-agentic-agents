@@ -2,11 +2,98 @@
 
 Featuring all the agenticly agentic features!
 
+## Prerequisites
+
+Before getting started with development, ensure your local environment meets the following requirements:
+
+### Node.js Version Requirements
+
+This project requires **Node.js version 20.19.0 or higher** (or Node.js 22.12.0+). The specific requirement comes from our build tool Vite 7.1.7.
+
+#### Check Your Current Node.js Version
+
+```bash
+node --version
+```
+
+You should see output like `v20.19.0` or higher. If your version is lower than 20.19.0, you'll need to upgrade.
+
+#### Installing or Upgrading Node.js
+
+Choose one of the following methods to install or upgrade Node.js:
+
+**Option 1: Official Node.js Installer (Recommended for beginners)**
+1. Visit [nodejs.org](https://nodejs.org/)
+2. Download the LTS version (Long Term Support)
+3. Run the installer and follow the instructions
+4. Restart your terminal and verify: `node --version`
+
+**Option 2: Node Version Manager (NVM) - Recommended for developers**
+
+*For macOS/Linux:*
+```bash
+# Install nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+# Restart terminal or run:
+source ~/.bashrc
+
+# Install and use Node.js 20 LTS
+nvm install 20
+nvm use 20
+
+# Verify installation
+node --version
+```
+
+*For Windows:*
+```bash
+# Install nvm-windows from: https://github.com/coreybutler/nvm-windows/releases
+# Then run:
+nvm install 20.19.0
+nvm use 20.19.0
+```
+
+**Option 3: Package Managers**
+
+*Using Homebrew (macOS):*
+```bash
+brew install node@20
+```
+
+*Using Chocolatey (Windows):*
+```bash
+choco install nodejs --version=20.19.0
+```
+
+*Using APT (Ubuntu/Debian):*
+```bash
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+#### Verify Installation
+
+After installation, verify both Node.js and npm are working:
+
+```bash
+node --version  # Should show v20.19.0 or higher
+npm --version   # Should show 10.0.0 or higher
+```
+
+### Additional Requirements
+
+- **Git**: For version control and cloning the repository
+- **Text Editor**: VS Code, WebStorm, or your preferred editor
+- **Modern Browser**: Chrome, Firefox, Safari, or Edge for development
+
 ## First UI Implementation
 
 This repository contains a React-based user interface for the Agenticly Agentic Demo application. The UI features a modern design with a gradient header banner and clean typography.
 
 ## Quick Start
+
+**⚠️ Important**: Make sure you have Node.js 20.19.0+ installed before proceeding. Check with `node --version` or see [Prerequisites](#prerequisites) for installation instructions.
 
 1. **Install dependencies:**
    ```bash
@@ -79,7 +166,7 @@ Before deploying to Azure, ensure you have the following:
 
 #### Required Tools
 - **Azure CLI** (version 2.40+): [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
-- **Node.js** (version 18+): [Install Node.js](https://nodejs.org/)
+- **Node.js** (version 20.19.0+): See [Prerequisites](#prerequisites) section for installation instructions
 - **Git**: For source code management
 - **Azure subscription**: Active Azure subscription with appropriate permissions
 
@@ -265,10 +352,13 @@ jobs:
 ### Troubleshooting
 
 #### Common Issues
-- **Build Failures**: Check Node.js version compatibility
+- **Node.js Version Incompatibility**: 
+  - **Error**: `The engine "node" is incompatible with this module` or build failures
+  - **Solution**: Ensure Node.js version 20.19.0+ is installed. Run `node --version` to check. See [Prerequisites](#prerequisites) for upgrade instructions.
+- **Build Failures**: Check Node.js version compatibility and ensure all dependencies are installed with `npm ci`
 - **Routing Issues**: Ensure SPA fallback is configured
 - **Environment Variables**: Verify VITE_ prefix for client-side variables
-- **Dependencies**: Use `npm ci` for consistent builds
+- **Dependencies**: Use `npm ci` for consistent builds instead of `npm install`
 
 #### Monitoring and Logs
 ```bash

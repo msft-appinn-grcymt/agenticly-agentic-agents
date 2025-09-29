@@ -48,7 +48,7 @@ az deployment group create \
 
 - [ ] Azure subscription with appropriate permissions
 - [ ] Azure CLI installed (version 2.40+)
-- [ ] Node.js 18+ installed
+- [ ] Node.js 20.19.0+ installed (see [README Prerequisites](./README.md#prerequisites) for installation instructions)
 - [ ] GitHub repository access
 - [ ] Git configured locally
 
