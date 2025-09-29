@@ -1,5 +1,7 @@
 # Agenticly Agentic Agents
 
+[![UI Tests](https://github.com/msft-appinn-grcymt/agenticly-agentic-agents/actions/workflows/ui-tests.yml/badge.svg)](https://github.com/msft-appinn-grcymt/agenticly-agentic-agents/actions/workflows/ui-tests.yml)
+
 Featuring all the agenticly agentic features!
 
 ## Prerequisites
@@ -120,6 +122,21 @@ This repository contains a React-based user interface for the Agenticly Agentic 
    npm run lint
    ```
 
+6. **Run UI tests:**
+   ```bash
+   npm run test:ui
+   ```
+
+7. **Run UI tests in headed mode (with browser window):**
+   ```bash
+   npm run test:ui:headed
+   ```
+
+8. **Debug UI tests:**
+   ```bash
+   npm run test:ui:debug
+   ```
+
 ## Features
 
 - Modern React 19 application built with Vite
@@ -127,6 +144,8 @@ This repository contains a React-based user interface for the Agenticly Agentic 
 - Clean, professional styling
 - ESLint configuration for code quality
 - Fast development and build process
+- **Comprehensive UI testing with Playwright**
+- **Automated testing in CI/CD pipeline**
 
 ## Project Structure
 
@@ -135,6 +154,8 @@ This repository contains a React-based user interface for the Agenticly Agentic 
 - `src/main.jsx` - Application entry point
 - `public/` - Static assets
 - `dist/` - Built application (generated)
+- **`tests/` - UI tests written in Playwright**
+- **`playwright.config.js` - Playwright test configuration**
 
 ## UI Components
 
@@ -149,6 +170,38 @@ This project uses:
 - Vite 7.1.7 (build tool)
 - ESLint (code linting)
 - Modern ES modules
+- **Playwright (UI testing framework)**
+
+## UI Testing
+
+The project includes comprehensive UI tests using Playwright that verify:
+
+- **Application Functionality**: Tests verify that the application loads correctly and displays expected content
+- **Visual Elements**: Validates the header banner with gradient background and "Agenticly Agentic Demo" text
+- **Content Validation**: Ensures the "Hello Boss!" greeting is displayed properly
+- **Responsive Design**: Tests mobile viewport compatibility
+- **Error-Free Execution**: Monitors for console errors during page load
+
+### Running Tests Locally
+
+```bash
+# Run all UI tests (headless)
+npm run test:ui
+
+# Run tests with browser window visible
+npm run test:ui:headed
+
+# Run tests in debug mode with step-by-step execution
+npm run test:ui:debug
+```
+
+### CI/CD Integration
+
+UI tests are **mandatory** for all pull requests:
+- Tests automatically run on every PR
+- PRs cannot be merged until all UI tests pass
+- Test results and reports are available in GitHub Actions
+- Failed tests generate detailed reports with screenshots
 
 ## Screenshot
 
