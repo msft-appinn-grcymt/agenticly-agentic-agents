@@ -61,7 +61,7 @@ for (const envVar of requiredEnvVars) {
 console.log('\n📦 Checking npm scripts:');
 try {
   const packageJsonPath = join(projectRoot, 'package.json');
-  const packageJson = JSON.parse(await import('fs').then(fs => fs.readFileSync(packageJsonPath, 'utf8')));
+  const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
   
   const requiredScripts = [
     'test:ui',
