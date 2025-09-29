@@ -4,6 +4,12 @@ on:
   pull_request:
     branches: [ main ]
     types: [ready_for_review]
+  workflow_dispatch:                
+    inputs:
+      reason:
+        description: "Why run this manually?"
+        required: false
+        default: "manual run"
 
 permissions: # Required when using Microsoft Entra ID to authenticate
   id-token: write
