@@ -1,5 +1,7 @@
 # Agenticly Agentic Agents
 
+[![UI Tests](https://github.com/msft-appinn-grcymt/agenticly-agentic-agents/actions/workflows/ui-tests.yml/badge.svg)](https://github.com/msft-appinn-grcymt/agenticly-agentic-agents/actions/workflows/ui-tests.yml)
+
 Featuring all the agenticly agentic features!
 
 ## Prerequisites
