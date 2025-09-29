@@ -122,17 +122,22 @@ This repository contains a React-based user interface for the Agenticly Agentic 
    npm run lint
    ```
 
-6. **Run UI tests:**
+6. **Run UI tests (local browsers):**
    ```bash
    npm run test:ui
    ```
 
-7. **Run UI tests in headed mode (with browser window):**
+7. **Run UI tests with Azure Playwright Testing service:**
+   ```bash
+   npm run test:ui:azure
+   ```
+
+8. **Run UI tests in headed mode (with browser window, local only):**
    ```bash
    npm run test:ui:headed
    ```
 
-8. **Debug UI tests:**
+9. **Debug UI tests (local only):**
    ```bash
    npm run test:ui:debug
    ```
@@ -182,26 +187,57 @@ The project includes comprehensive UI tests using Playwright that verify:
 - **Responsive Design**: Tests mobile viewport compatibility
 - **Error-Free Execution**: Monitors for console errors during page load
 
+### Azure Playwright Testing Service Integration
+
+This project is configured to use **Azure Playwright Testing service** in CI/CD pipelines, providing:
+- **Cloud-based browser execution**: Run tests on Microsoft's cloud infrastructure
+- **Parallel test execution**: Faster test runs with cloud scalability
+- **Cross-browser compatibility**: Test across multiple browsers and platforms
+- **Secure authentication**: Azure AD integration for enterprise security
+
+#### Configuration
+
+The project includes two Playwright configurations:
+
+1. **`playwright.config.js`**: Standard configuration with conditional Azure service connection
+2. **`playwright-azure.config.js`**: Dedicated Azure service configuration
+
+The Azure configuration is automatically used when the `PLAYWRIGHT_SERVICE_URL` environment variable is set.
+
+#### Required Azure Secrets
+
+The following GitHub secrets must be configured for Azure Playwright Testing:
+
+- `PLAYWRIGHT_SERVICE_URL`: The WebSocket endpoint URL for your Azure Playwright service
+- `AZURE_CLIENT_ID`: Azure service principal client ID
+- `AZURE_TENANT_ID`: Azure tenant identifier
+- `AZURE_SUBSCRIPTION_ID`: Azure subscription identifier
+
 ### Running Tests Locally
 
 ```bash
-# Run all UI tests (headless)
+# Run all UI tests (headless, local browsers)
 npm run test:ui
 
-# Run tests with browser window visible
+# Run tests with Azure Playwright Testing service
+npm run test:ui:azure
+
+# Run tests with browser window visible (local only)
 npm run test:ui:headed
 
-# Run tests in debug mode with step-by-step execution
+# Run tests in debug mode with step-by-step execution (local only)
 npm run test:ui:debug
 ```
 
 ### CI/CD Integration
 
 UI tests are **mandatory** for all pull requests:
-- Tests automatically run on every PR
+- Tests automatically run on Azure Playwright Testing service for every PR
+- Azure AD authentication is handled automatically in GitHub Actions
 - PRs cannot be merged until all UI tests pass
 - Test results and reports are available in GitHub Actions
 - Failed tests generate detailed reports with screenshots
+- No browser installation required - runs entirely in the cloud
 
 ## Screenshot
 

@@ -1,7 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
+ * Azure Playwright Testing Service Configuration
  * @see https://playwright.dev/docs/test-configuration
+ * @see https://docs.microsoft.com/en-us/azure/playwright-testing/
  */
 export default defineConfig({
   testDir: './tests',
@@ -23,34 +25,29 @@ export default defineConfig({
     trace: 'on-first-retry',
     /* Take screenshot on failure */
     screenshot: 'only-on-failure',
-    /* Connect to Azure Playwright Testing service when running in CI with service URL */
-    ...(process.env.PLAYWRIGHT_SERVICE_URL && { // eslint-disable-line no-undef
-      connectOptions: {
-        wsEndpoint: process.env.PLAYWRIGHT_SERVICE_URL, // eslint-disable-line no-undef
+    /* Connect to Azure Playwright Testing service */
+    connectOptions: {
+      wsEndpoint: process.env.PLAYWRIGHT_SERVICE_URL, // eslint-disable-line no-undef
+      options: {
+        timeout: 30000,
       },
-    }),
+    },
   },
 
-  /* Configure projects for major browsers */
+  /* Configure projects for major browsers - All enabled for Azure service */
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    // Enable Firefox and Safari only in CI for comprehensive testing 
-    // while keeping local development fast with just Chromium
-    ...(process.env.CI // eslint-disable-line no-undef
-      ? [
-          {
-            name: 'firefox',
-            use: { ...devices['Desktop Firefox'] },
-          },
-          {
-            name: 'webkit',
-            use: { ...devices['Desktop Safari'] },
-          },
-        ]
-      : []),
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
   ],
 
   /* Run your local dev server before starting the tests */
