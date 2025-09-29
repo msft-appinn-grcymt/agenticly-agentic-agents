@@ -7,6 +7,10 @@ name: Azure Static Web Apps CI/CD
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - README.md
+      - .github/workflows/*
+
   # pull_request:
   #   types: [opened, synchronize, reopened, closed]
   #   branches: [main]
