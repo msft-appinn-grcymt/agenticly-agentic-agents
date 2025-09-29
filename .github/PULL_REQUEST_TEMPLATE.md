@@ -16,7 +16,7 @@ Please ensure your pull request meets the following requirements:
 This PR must pass the following automated UI tests before it can be merged:
 - Application loads correctly
 - Header banner displays "Agenticly Agentic Demo" with gradient background  
-- Main content shows "Hello Boss!" greeting
+- Main content shows "Hello there Boss!" greeting
 - Responsive design works on mobile viewports
 - No JavaScript console errors
 

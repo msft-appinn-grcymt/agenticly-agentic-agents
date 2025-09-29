@@ -161,7 +161,7 @@ This repository contains a React-based user interface for the Agenticly Agentic 
 
 The application currently includes:
 - **Header Banner**: Displays "Agenticly Agentic Demo" with gradient background
-- **Main Content**: Shows "Hello Boss!" greeting message
+- **Main Content**: Shows "Hello there Boss!" greeting message
 
 ## Development
 
@@ -178,7 +178,7 @@ The project includes comprehensive UI tests using Playwright that verify:
 
 - **Application Functionality**: Tests verify that the application loads correctly and displays expected content
 - **Visual Elements**: Validates the header banner with gradient background and "Agenticly Agentic Demo" text
-- **Content Validation**: Ensures the "Hello Boss!" greeting is displayed properly
+- **Content Validation**: Ensures the "Hello there Boss!" greeting is displayed properly
 - **Responsive Design**: Tests mobile viewport compatibility
 - **Error-Free Execution**: Monitors for console errors during page load
 
@@ -207,7 +207,7 @@ UI tests are **mandatory** for all pull requests:
 
 ![UI Demo](https://github.com/user-attachments/assets/d5ef3bcd-6ff5-4d51-aa4d-f4f014984b4c)
 
-The interface features a beautiful gradient header with "Agenticly Agentic Demo" text and a centered "Hello Boss!" greeting below.
+The interface features a beautiful gradient header with "Agenticly Agentic Demo" text and a centered "Hello there Boss!" greeting below.
 
 ## Azure Deployment
 

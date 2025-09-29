@@ -68,4 +68,4 @@ For detailed documentation, see the complete Azure Deployment section in [README
 
 ![Agenticly Agentic Demo](https://github.com/user-attachments/assets/cc56d271-1dd8-4c87-9c80-9d0bbbc66f36)
 
-The application features a beautiful gradient header with "Agenticly Agentic Demo" text and displays "Hello Boss!" as the main content.
+The application features a beautiful gradient header with "Agenticly Agentic Demo" text and displays "Hello there Boss!" as the main content.
