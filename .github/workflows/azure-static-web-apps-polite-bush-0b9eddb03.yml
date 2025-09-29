@@ -22,6 +22,11 @@ jobs:
         with:
           submodules: true
           lfs: false
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v5.0.0
+        with:
+          # Version Spec of the version to use. Examples: 12.x, 10.15.1, >=10.15.0.
+          node-version: 22.12.x          
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -47,3 +52,4 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_POLITE_BUSH_0B9EDDB03 }}
           action: "close"
+
