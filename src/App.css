@@ -1,6 +1,4 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
   padding: 0;
   text-align: center;
 }
@@ -50,6 +48,8 @@
 
 .main-content {
   padding: 3rem 2rem;
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
 .greeting {
