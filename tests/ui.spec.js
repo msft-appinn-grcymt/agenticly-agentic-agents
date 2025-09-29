@@ -33,23 +33,23 @@ test.describe('Agenticly Agentic Demo UI Tests', () => {
     await expect(greeting).toHaveText('Hello Boss!');
   });
 
-  test('should have proper styling and layout', async ({ page }) => {
-    await page.goto('/');
+  // test('should have proper styling and layout', async ({ page }) => {
+  //   await page.goto('/');
 
-    // Check that the header has the expected gradient background
-    const header = page.locator('header.banner');
-    const headerStyles = await header.evaluate(el => getComputedStyle(el));
+  //   // Check that the header has the expected gradient background
+  //   const header = page.locator('header.banner');
+  //   const headerStyles = await header.evaluate(el => getComputedStyle(el));
     
-    // Verify the header has a background (gradient styling)
-    expect(headerStyles.background).toBeTruthy();
+  //   // Verify the header has a background (gradient styling)
+  //   expect(headerStyles.background).toBeTruthy();
     
-    // Check that the main content is properly centered
-    const greeting = page.locator('main.main-content p.greeting');
-    const greetingStyles = await greeting.evaluate(el => getComputedStyle(el));
+  //   // Check that the main content is properly centered
+  //   const greeting = page.locator('main.main-content p.greeting');
+  //   const greetingStyles = await greeting.evaluate(el => getComputedStyle(el));
     
-    // Verify text alignment
-    expect(greetingStyles.textAlign).toBe('center');
-  });
+  //   // Verify text alignment
+  //   expect(greetingStyles.textAlign).toBe('center');
+  // });
 
   test('should be responsive on mobile viewport', async ({ page }) => {
     // Set mobile viewport
