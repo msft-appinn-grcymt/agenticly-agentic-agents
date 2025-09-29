@@ -30,7 +30,7 @@ test.describe('Agenticly Agentic Demo UI Tests', () => {
     // Check that the greeting is displayed
     const greeting = page.locator('main.main-content p.greeting');
     await expect(greeting).toBeVisible();
-    await expect(greeting).toHaveText('Hello Boss!');
+    await expect(greeting).toHaveText('Hello there Boss!');
   });
 
   // test('should have proper styling and layout', async ({ page }) => {
@@ -67,7 +67,7 @@ test.describe('Agenticly Agentic Demo UI Tests', () => {
     
     // Verify text content is preserved
     await expect(title).toHaveText('Agenticly Agentic Demo');
-    await expect(greeting).toHaveText('Hello Boss!');
+    await expect(greeting).toHaveText('Hello there Boss!');
   });
 
   test('should have no console errors', async ({ page }) => {
