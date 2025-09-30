@@ -22,7 +22,8 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     /* Take screenshot on failure */
-    screenshot: 'only-on-failure',
+    screenshot: 'on',
+    video: 'retain-on-failure',
     /* Connect to Azure Playwright Testing service when running in CI with service URL */
     ...(process.env.PLAYWRIGHT_SERVICE_URL && { // eslint-disable-line no-undef
       connectOptions: {
