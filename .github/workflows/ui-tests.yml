@@ -39,9 +39,6 @@ jobs:
           
       - name: Install dependencies
         run: npm ci
-        
-      - name: Build application
-        run: npm run build
 
       - name: Run Playwright tests with Azure service
         run: npx playwright test -c playwright.service.config.ts --workers=15
