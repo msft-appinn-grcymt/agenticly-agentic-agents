@@ -58,6 +58,6 @@ jobs:
            uses: azure/container-apps-deploy-action@v1
            with:
              acrName: ${{ github.event.inputs.registry }}
-             containerAppName: $containerApp
-             resourceGroup: $resourceGroup
+             containerAppName: ${{ github.event.inputs.containerApp }}
+             resourceGroup: ${{ github.event.inputs.resourceGroup }}
              imageToDeploy: ${{ github.event.inputs.registry }}.azurecr.io/agentic/ms-roles-api:${{ github.sha }}
