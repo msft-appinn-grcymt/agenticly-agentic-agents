@@ -29,7 +29,7 @@ jobs:
               username: ${{ secrets.AZURE_SP_ACR_CLIENT_ID }}
               password: ${{ secrets.AZURE_SP_ACR_PASSWORD }}
         - run: |
-            docker build . -t ${{ github.event.inputs.registry }}.azurecr.io/agentic/ms-roles-api:${{ github.sha }}
+            docker build ms-roles-api -t ${{ github.event.inputs.registry }}.azurecr.io/agentic/ms-roles-api:${{ github.sha }}
             docker push ${{ github.event.inputs.registry }}.azurecr.io/agentic/ms-roles-api:${{ github.sha }}
 
         # - name: Azure Container Registry Build
