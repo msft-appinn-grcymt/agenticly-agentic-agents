@@ -105,8 +105,9 @@ async def list_all_employees():
         "vasilis": "Vasilis Zisiadis", 
         "dimitris": "Dimitris Kotanis",
         "joanna": "Joanna Tsakona",
-        "thanasis": "Thanasis Ragos"
-    }
+        "thanasis": "Thanasis Ragos",
+        "konstantina": "Konstantina Fotiadou"
+            }
     
     for first_name, role in EMPLOYEE_ROLES.items():
         employees.append({
