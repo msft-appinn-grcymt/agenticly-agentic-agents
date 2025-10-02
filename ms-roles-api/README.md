@@ -1,10 +1,10 @@
 # MS Roles API
 
-A FastAPI-based microservice that returns employee roles based on first names.
+A FastAPI-based microservice that returns employee roles based on first names or last names (surnames).
 
 ## Features
 
-- Get employee role by first name
+- Get employee role by first name or last name
 - RESTful API with multiple endpoints
 - Containerized with Docker
 - Automatic API documentation with Swagger UI
@@ -41,6 +41,18 @@ Example: `/get-role/Mary`
 
 ### GET /employees
 List all employees and their roles
+
+### POST /get-role-by-surname
+Get role by last name (JSON body)
+```json
+{
+  "last_name": "Kotanis"
+}
+```
+
+### GET /get-role-by-surname/{last_name}
+Get role by last name (path parameter)
+Example: `/get-role-by-surname/Kotanis`
 
 ## Running the API
 
@@ -98,6 +110,18 @@ curl "http://localhost:8000/get-role/Mary"
 3. List all employees:
 ```bash
 curl "http://localhost:8000/employees"
+```
+
+4. Get role by last name (POST request):
+```bash
+curl -X POST "http://localhost:8000/get-role-by-surname" \
+     -H "Content-Type: application/json" \
+     -d '{"last_name": "Kotanis"}'
+```
+
+5. Get role by last name (GET request):
+```bash
+curl "http://localhost:8000/get-role-by-surname/Kotanis"
 ```
 
 ## Response Format

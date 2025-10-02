@@ -1,0 +1,69 @@
+name: Container Apps CI/CD
+
+on:
+ push:
+    branches:
+      - main
+    paths:
+      - ms-roles-api/*
+ workflow_dispatch:                
+    inputs:
+      registry:
+        description: "Registry Name"
+        required: true
+        default: acragenticgrcymtgwc
+      resourceGroup:
+        description: "Resource Group Name"
+        required: true
+        default: rg-agenticly-agentic-poc-
+      containerApp:
+        description: "Container App Name"
+        required: true
+        default: aca-agenticly-api-poc-gwc
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+    build_and_deploy_job:
+        runs-on: ubuntu-latest
+        name: Build and push to ACR and promote to ACA
+        env:
+          REGISTRY_NAME: ${{ github.event.inputs.registry || 'acragenticgrcymtgwc' }}
+          RESOURCE_GROUP_NAME: ${{ github.event.inputs.resourceGroup || 'rg-agenticly-agentic-poc-' }}
+          CONTAINER_APP_NAME: ${{ github.event.inputs.containerApp || 'aca-agenticly-api-poc-gwc' }}
+        steps:
+        -  name: 'Checkout GitHub Action'
+           uses: actions/checkout@main
+        -  name: Login to ACR
+           uses: docker/login-action@v3
+           with:
+              registry: ${{ env.REGISTRY_NAME }}.azurecr.io
+              username: ${{ secrets.AZURE_SP_ACR_CLIENT_ID }}
+              password: ${{ secrets.AZURE_SP_ACR_PASSWORD }}
+        -  name: Build image and push to ACR
+           run: |
+            docker build ./ms-roles-api -t ${{ env.REGISTRY_NAME }}.azurecr.io/agentic/ms-roles-api:${{ github.sha }}
+            docker push ${{ env.REGISTRY_NAME }}.azurecr.io/agentic/ms-roles-api:${{ github.sha }}
+        -  name: Azure login
+           uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5
+           with:
+              client-id: ${{ secrets.AZURE_CLIENT_ID }}
+              tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+              subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        # -  name: Extract registry name
+        #    id: extract-registry
+        #    run: |
+        #      REGISTRY_NAME="${{ github.event.inputs.registry }}"
+        #      REGISTRY_PREFIX="${REGISTRY_NAME%%-*}"
+        #      echo "registry-name=$REGISTRY_PREFIX" >> $GITHUB_OUTPUT
+        -  name: Deploy to Container App
+           uses: azure/container-apps-deploy-action@v1
+           with:
+             acrName: ${{ env.REGISTRY_NAME }}
+             containerAppName: ${{ env.CONTAINER_APP_NAME }}
+             resourceGroup: ${{ env.RESOURCE_GROUP_NAME }}
+             imageToDeploy: ${{ env.REGISTRY_NAME }}.azurecr.io/agentic/ms-roles-api:${{ github.sha }}
+             acrPassword: ${{ secrets.ACR_PASSWORD }}
+             acrUsername: ${{ secrets.ACR_USERNAME }}

@@ -5,7 +5,7 @@ import uvicorn
 
 app = FastAPI(
     title="MS Roles API",
-    description="API to get employee roles by first name",
+    description="API to get employee roles by first name or last name",
     version="1.0.0"
 )
 
@@ -49,11 +49,15 @@ EMPLOYEES = {
     }
 }
 
+
 # Backward compatibility - derived from EMPLOYEES
 EMPLOYEE_ROLES = {k: v["role"] for k, v in EMPLOYEES.items()}
 
 class NameRequest(BaseModel):
     first_name: str
+
+class LastNameRequest(BaseModel):
+    last_name: str
 
 class RoleResponse(BaseModel):
     first_name: str
@@ -62,7 +66,7 @@ class RoleResponse(BaseModel):
 
 @app.get("/")
 async def root():
-    return {"message": "MS Roles API - Get employee roles by first name"}
+    return {"message": "MS Roles API - Get employee roles by first name or last name"}
 
 @app.get("/health")
 async def health_check():
@@ -125,6 +129,68 @@ async def list_all_employees():
         })
     
     return {"employees": employees}
+
+@app.post("/get-role-by-surname", response_model=RoleResponse)
+async def get_role_by_surname(request: LastNameRequest):
+    """
+    Get employee role by last name
+    """
+    last_name = request.last_name.lower().strip()
+    
+    if last_name not in SURNAME_TO_FIRSTNAME:
+        raise HTTPException(
+            status_code=404, 
+            detail=f"No employee found with last name: {request.last_name}"
+        )
+    
+    first_name = SURNAME_TO_FIRSTNAME[last_name]
+    role = EMPLOYEE_ROLES[first_name]
+    
+    # Map back to full names for response
+    full_name_mapping = {
+        "mary": "Mary Bina",
+        "vasilis": "Vasilis Zisiadis",
+        "dimitris": "Dimitris Kotanis", 
+        "joanna": "Joanna Tsakona",
+        "thanasis": "Thanasis Ragos"
+    }
+    
+    return RoleResponse(
+        first_name=first_name.title(),
+        role=role,
+        full_name=full_name_mapping[first_name]
+    )
+
+@app.get("/get-role-by-surname/{last_name}", response_model=RoleResponse)
+async def get_role_by_surname_path(last_name: str):
+    """
+    Get employee role by last name (path parameter)
+    """
+    last_name_lower = last_name.lower().strip()
+    
+    if last_name_lower not in SURNAME_TO_FIRSTNAME:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No employee found with last name: {last_name}"
+        )
+    
+    first_name = SURNAME_TO_FIRSTNAME[last_name_lower]
+    role = EMPLOYEE_ROLES[first_name]
+    
+    # Map back to full names for response
+    full_name_mapping = {
+        "mary": "Mary Bina", 
+        "vasilis": "Vasilis Zisiadis",
+        "dimitris": "Dimitris Kotanis",
+        "joanna": "Joanna Tsakona", 
+        "thanasis": "Thanasis Ragos"
+    }
+    
+    return RoleResponse(
+        first_name=first_name.title(),
+        role=role,
+        full_name=full_name_mapping[first_name]
+    )
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

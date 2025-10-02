@@ -165,8 +165,10 @@ This repository contains a React-based user interface for the Agenticly Agentic 
 ## UI Components
 
 The application currently includes:
-- **Header Banner**: Displays "Agenticly Agentic Demo" with gradient background
-- **Main Content**: Shows "Hello there Boss!" greeting message
+- **Header Banner**: Displays "Agenticly Agentic Demo" with gradient background (purple-blue gradient)
+- **Main Content**: Shows "Hello there AI!" greeting message in an elegant glassmorphism card
+- **Background**: Subtle geometric pattern with gradient overlay for visual depth
+- **Custom Error Pages**: Professional 400, 403, and 404 error pages with consistent branding
 
 ## Development
 
@@ -241,13 +243,22 @@ UI tests are **mandatory** for all pull requests:
 
 ## Screenshot
 
-![UI Demo](https://github.com/user-attachments/assets/d5ef3bcd-6ff5-4d51-aa4d-f4f014984b4c)
+![UI Demo](https://github.com/user-attachments/assets/98c6e0a2-5f6c-49b3-beef-51564a5e98a0)
 
-The interface features a beautiful gradient header with "Agenticly Agentic Demo" text and a centered "Hello there Boss!" greeting below.
+The interface features a beautiful gradient header with "Agenticly Agentic Demo" text and a centered "Hello there AI!" greeting with an elegant glassmorphism card design over a subtle geometric background pattern.
 
 ## Azure Deployment
 
 This section provides comprehensive guidance for deploying the Agenticly Agentic Agents web application to Microsoft Azure using modern cloud-native approaches and best practices.
+
+### 📊 Current Infrastructure Status
+
+The application is currently deployed on Azure Static Web Apps:
+- **Subscription**: `6a450bf1-e243-4036-8210-822c2b95d3ad`
+- **Resource Group**: `rg-agenticly-agentic-poc-`
+- **Static Web App**: `msft-grcymt-agenticly-agentic`
+
+For detailed infrastructure analysis and optimization recommendations, see [AZURE_INFRASTRUCTURE_ANALYSIS.md](./AZURE_INFRASTRUCTURE_ANALYSIS.md).
 
 ### Prerequisites
 
