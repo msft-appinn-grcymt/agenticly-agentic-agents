@@ -9,23 +9,49 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Data mapping first names to roles
-EMPLOYEE_ROLES = {
-    "mary": "CSA Manager",
-    "vasilis": "CSA Cloud&AI", 
-    "dimitris": "CSA Infra",
-    "joanna": "CSAM",
-    "thanasis": "CSA Security"
+# Centralized employee data structure
+EMPLOYEES = {
+    "mary": {
+        "first_name": "mary",
+        "last_name": "bina",
+        "full_name": "Mary Bina",
+        "role": "CSA Manager"
+    },
+    "vasilis": {
+        "first_name": "vasilis",
+        "last_name": "zisiadis",
+        "full_name": "Vasilis Zisiadis",
+        "role": "CSA Cloud&AI"
+    },
+    "dimitris": {
+        "first_name": "dimitris",
+        "last_name": "kotanis",
+        "full_name": "Dimitris Kotanis",
+        "role": "CSA Infra"
+    },
+    "joanna": {
+        "first_name": "joanna",
+        "last_name": "tsakona",
+        "full_name": "Joanna Tsakona",
+        "role": "CSAM"
+    },
+    "thanasis": {
+        "first_name": "thanasis",
+        "last_name": "ragos",
+        "full_name": "Thanasis Ragos",
+        "role": "CSA Security"
+    },
+    "konstantina": {
+        "first_name": "konstantina",
+        "last_name": "fotiadou",
+        "full_name": "Konstantina Fotiadou",
+        "role": "CSA Data&AI"
+    }
 }
 
-# Mapping of last names to first names for surname-based lookup
-SURNAME_TO_FIRSTNAME = {
-    "bina": "mary",
-    "zisiadis": "vasilis",
-    "kotanis": "dimitris",
-    "tsakona": "joanna",
-    "ragos": "thanasis"
-}
+
+# Backward compatibility - derived from EMPLOYEES
+EMPLOYEE_ROLES = {k: v["role"] for k, v in EMPLOYEES.items()}
 
 class NameRequest(BaseModel):
     first_name: str
@@ -53,27 +79,18 @@ async def get_role(request: NameRequest):
     """
     first_name = request.first_name.lower().strip()
     
-    if first_name not in EMPLOYEE_ROLES:
+    if first_name not in EMPLOYEES:
         raise HTTPException(
             status_code=404, 
             detail=f"No employee found with first name: {request.first_name}"
         )
     
-    role = EMPLOYEE_ROLES[first_name]
-    
-    # Map back to full names for response
-    full_name_mapping = {
-        "mary": "Mary Bina",
-        "vasilis": "Vasilis Zisiadis",
-        "dimitris": "Dimitris Kotanis", 
-        "joanna": "Joanna Tsakona",
-        "thanasis": "Thanasis Ragos"
-    }
+    employee = EMPLOYEES[first_name]
     
     return RoleResponse(
         first_name=request.first_name,
-        role=role,
-        full_name=full_name_mapping[first_name]
+        role=employee["role"],
+        full_name=employee["full_name"]
     )
 
 @app.get("/get-role/{first_name}", response_model=RoleResponse)
@@ -83,27 +100,18 @@ async def get_role_by_path(first_name: str):
     """
     first_name_lower = first_name.lower().strip()
     
-    if first_name_lower not in EMPLOYEE_ROLES:
+    if first_name_lower not in EMPLOYEES:
         raise HTTPException(
             status_code=404,
             detail=f"No employee found with first name: {first_name}"
         )
     
-    role = EMPLOYEE_ROLES[first_name_lower]
-    
-    # Map back to full names for response
-    full_name_mapping = {
-        "mary": "Mary Bina", 
-        "vasilis": "Vasilis Zisiadis",
-        "dimitris": "Dimitris Kotanis",
-        "joanna": "Joanna Tsakona", 
-        "thanasis": "Thanasis Ragos"
-    }
+    employee = EMPLOYEES[first_name_lower]
     
     return RoleResponse(
         first_name=first_name,
-        role=role,
-        full_name=full_name_mapping[first_name_lower]
+        role=employee["role"],
+        full_name=employee["full_name"]
     )
 
 @app.get("/employees")
@@ -112,20 +120,12 @@ async def list_all_employees():
     List all employees and their roles
     """
     employees = []
-    full_name_mapping = {
-        "mary": "Mary Bina",
-        "vasilis": "Vasilis Zisiadis", 
-        "dimitris": "Dimitris Kotanis",
-        "joanna": "Joanna Tsakona",
-        "thanasis": "Thanasis Ragos",
-        "konstantina": "Konstantina Fotiadou"
-            }
     
-    for first_name, role in EMPLOYEE_ROLES.items():
+    for employee_data in EMPLOYEES.values():
         employees.append({
-            "first_name": first_name.title(),
-            "full_name": full_name_mapping[first_name],
-            "role": role
+            "first_name": employee_data["first_name"].title(),
+            "full_name": employee_data["full_name"],
+            "role": employee_data["role"]
         })
     
     return {"employees": employees}
