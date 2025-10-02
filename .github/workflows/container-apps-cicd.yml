@@ -1,11 +1,11 @@
 name: Container Apps CI/CD
 on:
-push:
+ push:
     branches:
       - main
     paths:
       - ms-roles-api/*
-workflow_dispatch:                
+ workflow_dispatch:                
     inputs:
       registry:
         description: "Registry Name"
