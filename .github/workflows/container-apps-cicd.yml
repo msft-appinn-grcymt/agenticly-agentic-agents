@@ -60,4 +60,4 @@ jobs:
              acrName: ${{ github.event.inputs.registry }}
              containerAppName: ${{ github.event.inputs.containerApp }}
              resourceGroup: ${{ github.event.inputs.resourceGroup }}
-             imageToDeploy: agentic/ms-roles-api:${{ github.sha }}
+             imageToDeploy: ${{ github.event.inputs.registry }}.azurecr.io/agentic/ms-roles-api:${{ github.sha }}
