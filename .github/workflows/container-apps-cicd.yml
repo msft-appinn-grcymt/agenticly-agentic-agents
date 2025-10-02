@@ -33,7 +33,7 @@ jobs:
               registry: ${{ github.event.inputs.registry }}.azurecr.io
               username: ${{ secrets.AZURE_SP_ACR_CLIENT_ID }}
               password: ${{ secrets.AZURE_SP_ACR_PASSWORD }}
-        -  name: Build image and push to Ash
+        -  name: Build image and push to ACR
            run: |
             docker build ./ms-roles-api -t ${{ github.event.inputs.registry }}.azurecr.io/agentic/ms-roles-api:${{ github.sha }}
             docker push ${{ github.event.inputs.registry }}.azurecr.io/agentic/ms-roles-api:${{ github.sha }}
