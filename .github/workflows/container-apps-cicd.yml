@@ -1,0 +1,48 @@
+name: Container Apps CI/CD
+on:
+push:
+    branches:
+      - main
+    paths:
+      - ms-roles-api/*
+workflow_dispatch:                
+    inputs:
+      registry:
+        description: "Registry Name"
+        required: true
+        default: acragenticlyagenticpocgwc
+jobs:
+    build_and_deploy_job:
+        runs-on: ubuntu-latest
+        name: Build and push to ACR and promote to ACA
+        steps:
+        - name: Azure login
+          uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5
+          with:
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        - name: Azure Container Registry Build
+          uses: Azure/acr-build@v1
+          with:
+            # Service Principal with Contributor role on the ACR
+            service_principal: ${{ secrets.AZURE_SP_ACR_CLIENT_ID }}
+            # Service Principal password 
+            service_principal_password: ${{ secrets.AZURE_SP_ACR_PASSWORD }}
+            # Azure Container Registry tenant
+            tenant: ${{ secrets.AZURE_TENANT_ID }}
+            # The name of the ACR, minus the .azurecr.io
+            registry: ${{ github.event.inputs.registry }}
+            # Repository to use
+            repository: agentic
+            # Docker image name
+            image: ms-roles-api # optional
+            # # Docker image tag, default to the commit SHA
+            # tag: # optional
+            # The folder in the Github repo that holds the source
+            folder: ms-roles-api
+            # The location of the Dockerfile; defaults to ./Dockerfile
+            # dockerfile: # optional
+            # # JSON specifying key=value pairs as as Docker build arguments
+            # build_args: # optional
+          
