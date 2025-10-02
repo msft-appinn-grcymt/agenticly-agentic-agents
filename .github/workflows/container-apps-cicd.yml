@@ -11,7 +11,7 @@ on:
       registry:
         description: "Registry Name"
         required: true
-        default: acragenticlyagenticpocgwc-g8f9bua5c7csfbe0
+        default: acragenticgrcymtgwc
       resourceGroup:
         description: "Resource Group Name"
         required: true
@@ -57,7 +57,7 @@ jobs:
         -  name: Deploy to Container App
            uses: azure/container-apps-deploy-action@v1
            with:
-             acrName: ${{ steps.extract-registry.outputs.registry-name }}
+             acrName: ${{ github.event.inputs.registry }}
              containerAppName: $containerApp
              resourceGroup: $resourceGroup
              imageToDeploy: ${{ github.event.inputs.registry }}.azurecr.io/agentic/ms-roles-api:${{ github.sha }}
