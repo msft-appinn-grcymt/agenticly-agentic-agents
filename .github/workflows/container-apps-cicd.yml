@@ -1,4 +1,8 @@
 name: Container Apps CI/CD
+
+env:
+  containerApp: aca-agenticly-api-poc-gwc
+
 on:
  push:
     branches:
@@ -11,17 +15,15 @@ on:
         description: "Registry Name"
         required: true
         default: acragenticlyagenticpocgwc-g8f9bua5c7csfbe0
+      resourceGroup:
+        description: "Resource Group Name"
+        required: true
+        default: rg-agenticly-agentic-poc-
 jobs:
     build_and_deploy_job:
         runs-on: ubuntu-latest
         name: Build and push to ACR and promote to ACA
         steps:
-        # - name: Azure login
-        #   uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5
-        #   with:
-        #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         -  name: 'Checkout GitHub Action'
            uses: actions/checkout@main
         -  name: Login to ACR
@@ -30,31 +32,20 @@ jobs:
               registry: ${{ github.event.inputs.registry }}.azurecr.io
               username: ${{ secrets.AZURE_SP_ACR_CLIENT_ID }}
               password: ${{ secrets.AZURE_SP_ACR_PASSWORD }}
-        -  run: |
+        -  name: Build image and push to Ash
+           run: |
             docker build ./ms-roles-api -t ${{ github.event.inputs.registry }}.azurecr.io/agentic/ms-roles-api:${{ github.sha }}
             docker push ${{ github.event.inputs.registry }}.azurecr.io/agentic/ms-roles-api:${{ github.sha }}
-
-        # - name: Azure Container Registry Build
-        #   uses: Azure/acr-build@v1
-        #   with:
-        #     # Service Principal with Contributor role on the ACR
-        #     service_principal: ${{ secrets.AZURE_SP_ACR_CLIENT_ID }}
-        #     # Service Principal password 
-        #     service_principal_password: ${{ secrets.AZURE_SP_ACR_PASSWORD }}
-        #     # Azure Container Registry tenant
-        #     tenant: ${{ secrets.AZURE_TENANT_ID }}
-        #     # The name of the ACR, minus the .azurecr.io
-        #     registry: ${{ github.event.inputs.registry }}
-        #     # Repository to use
-        #     repository: agentic
-        #     # Docker image name
-        #     image: ms-roles-api # optional
-        #     # # Docker image tag, default to the commit SHA
-        #     # tag: # optional
-        #     # The folder in the Github repo that holds the source
-        #     folder: ms-roles-api
-        #     # The location of the Dockerfile; defaults to ./Dockerfile
-        #     # dockerfile: # optional
-        #     # # JSON specifying key=value pairs as as Docker build arguments
-        #     # build_args: # optional
-          
+        -  name: Azure login
+           uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5
+           with:
+              client-id: ${{ secrets.AZURE_CLIENT_ID }}
+              tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+              subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        -  name: Deploy to Container App
+           uses: azure/container-apps-deploy-action@v1
+           with:
+             acrName: ${{ github.event.inputs.registry }}.azurecr.io
+             containerAppName: $containerApp
+             resourceGroup: $resourceGroup
+             imageToDeploy: ${{ github.event.inputs.registry }}.azurecr.io/agentic/ms-roles-api:${{ github.sha }}
