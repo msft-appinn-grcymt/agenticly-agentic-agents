@@ -20,7 +20,7 @@ on:
         description: "Container App Name"
         required: true
         default: aca-agenticly-api-poc-gwc
-        
+
 permissions:
   id-token: write
   contents: read
@@ -51,7 +51,7 @@ jobs:
         -  name: Deploy to Container App
            uses: azure/container-apps-deploy-action@v1
            with:
-             acrName: ${{ github.event.inputs.registry }}.azurecr.io
+             acrName: ${{ github.event.inputs.registry }}
              containerAppName: $containerApp
              resourceGroup: $resourceGroup
              imageToDeploy: ${{ github.event.inputs.registry }}.azurecr.io/agentic/ms-roles-api:${{ github.sha }}
