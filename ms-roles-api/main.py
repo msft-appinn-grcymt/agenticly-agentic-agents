@@ -15,7 +15,8 @@ EMPLOYEE_ROLES = {
     "vasilis": "CSA Cloud&AI", 
     "dimitris": "CSA Infra",
     "joanna": "CSAM",
-    "thanasis": "CSA Security"
+    "thanasis": "CSA Security",
+    "konstantina": "CSA Data&AI"
 }
 
 class NameRequest(BaseModel):
@@ -55,7 +56,8 @@ async def get_role(request: NameRequest):
         "vasilis": "Vasilis Zisiadis",
         "dimitris": "Dimitris Kotanis", 
         "joanna": "Joanna Tsakona",
-        "thanasis": "Thanasis Ragos"
+        "thanasis": "Thanasis Ragos",
+        "konstantina": "Konstantina Fotiadou"
     }
     
     return RoleResponse(
@@ -85,7 +87,8 @@ async def get_role_by_path(first_name: str):
         "vasilis": "Vasilis Zisiadis",
         "dimitris": "Dimitris Kotanis",
         "joanna": "Joanna Tsakona", 
-        "thanasis": "Thanasis Ragos"
+        "thanasis": "Thanasis Ragos",
+        "konstantina": "Konstantina Fotiadou"
     }
     
     return RoleResponse(
