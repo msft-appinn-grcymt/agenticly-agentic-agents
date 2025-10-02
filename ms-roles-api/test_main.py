@@ -43,7 +43,7 @@ def test_list_employees():
     assert response.status_code == 200
     data = response.json()
     assert "employees" in data
-    assert len(data["employees"]) == 5
+    assert len(data["employees"]) == 6
 
 def test_case_insensitive():
     # Test with different cases
