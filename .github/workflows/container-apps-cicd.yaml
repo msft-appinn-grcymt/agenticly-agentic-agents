@@ -7,10 +7,10 @@ on:
       - ms-roles-api/*
  workflow_dispatch:                
     inputs:
-      reason:
-        description: "Why run this manually?"
-        required: false
-        default: "manual run"
+      registry:
+        description: "Registry Name"
+        required: true
+        default: acragenticlyagenticpocgwc
 jobs:
     build_and_deploy_job:
         runs-on: ubuntu-latest
@@ -26,27 +26,23 @@ jobs:
           uses: Azure/acr-build@v1
           with:
             # Service Principal with Contributor role on the ACR
-            service_principal: 
-            # Service Principal password
-            service_principal_password: 
+            service_principal: ${{ secrets.AZURE_SP_ACR_CLIENT_ID }}
+            # Service Principal password 
+            service_principal_password: ${{ secrets.AZURE_SP_ACR_PASSWORD }}
             # Azure Container Registry tenant
-            tenant: 
+            tenant: ${{ secrets.AZURE_TENANT_ID }}
             # The name of the ACR, minus the .azurecr.io
-            registry: 
+            registry: ${{ github.event.inputs.registry }}
             # Repository to use
-            repository: 
-            # Github access token for private repositories
-            git_access_token: 
+            repository: agentic
             # Docker image name
-            image: # optional
-            # Docker image tag, default to the commit SHA
-            tag: # optional
-            # Branch to build from, defaults to master
-            branch: # optional
+            image: ms-roles-api# optional
+            # # Docker image tag, default to the commit SHA
+            # tag: # optional
             # The folder in the Github repo that holds the source
-            folder: 
+            folder: ms-roles-api
             # The location of the Dockerfile; defaults to ./Dockerfile
-            dockerfile: # optional
-            # JSON specifying key=value pairs as as Docker build arguments
-            build_args: # optional
+            # dockerfile: # optional
+            # # JSON specifying key=value pairs as as Docker build arguments
+            # build_args: # optional
           
