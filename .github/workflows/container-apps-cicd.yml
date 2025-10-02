@@ -48,12 +48,12 @@ jobs:
               client-id: ${{ secrets.AZURE_CLIENT_ID }}
               tenant-id: ${{ secrets.AZURE_TENANT_ID }}
               subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        -  name: Extract registry name
-           id: extract-registry
-           run: |
-             REGISTRY_NAME="${{ github.event.inputs.registry }}"
-             REGISTRY_PREFIX="${REGISTRY_NAME%%-*}"
-             echo "registry-name=$REGISTRY_PREFIX" >> $GITHUB_OUTPUT
+        # -  name: Extract registry name
+        #    id: extract-registry
+        #    run: |
+        #      REGISTRY_NAME="${{ github.event.inputs.registry }}"
+        #      REGISTRY_PREFIX="${REGISTRY_NAME%%-*}"
+        #      echo "registry-name=$REGISTRY_PREFIX" >> $GITHUB_OUTPUT
         -  name: Deploy to Container App
            uses: azure/container-apps-deploy-action@v1
            with:
@@ -61,3 +61,5 @@ jobs:
              containerAppName: ${{ github.event.inputs.containerApp }}
              resourceGroup: ${{ github.event.inputs.resourceGroup }}
              imageToDeploy: ${{ github.event.inputs.registry }}.azurecr.io/agentic/ms-roles-api:${{ github.sha }}
+             acrPassword: ${{ secrets.ACR_PASSWORD }}
+             acrUsername: ${{ secrets.ACR_USERNAME }}
