@@ -36,7 +36,7 @@ jobs:
             # Repository to use
             repository: agentic
             # Docker image name
-            image: ms-roles-api# optional
+            image: ms-roles-api # optional
             # # Docker image tag, default to the commit SHA
             # tag: # optional
             # The folder in the Github repo that holds the source
