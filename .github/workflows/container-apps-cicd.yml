@@ -14,7 +14,7 @@ on:
 jobs:
     build_and_deploy_job:
         runs-on: ubuntu-latest
-        name: Build and push to ACR and promoto to ACA
+        name: Build and push to ACR and promote to ACA
         steps:
         - name: Azure login
           uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5
