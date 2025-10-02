@@ -1,10 +1,10 @@
+name: Container Apps CI/CD
 on:
  push:
     branches:
       - main
-    paths-include:
+    paths:
       - ms-roles-api/*
-      
  workflow_dispatch:                
     inputs:
       reason:
@@ -22,3 +22,31 @@ jobs:
             client-id: ${{ secrets.AZURE_CLIENT_ID }}
             tenant-id: ${{ secrets.AZURE_TENANT_ID }}
             subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        - name: Azure Container Registry Build
+          uses: Azure/acr-build@v1
+          with:
+            # Service Principal with Contributor role on the ACR
+            service_principal: 
+            # Service Principal password
+            service_principal_password: 
+            # Azure Container Registry tenant
+            tenant: 
+            # The name of the ACR, minus the .azurecr.io
+            registry: 
+            # Repository to use
+            repository: 
+            # Github access token for private repositories
+            git_access_token: 
+            # Docker image name
+            image: # optional
+            # Docker image tag, default to the commit SHA
+            tag: # optional
+            # Branch to build from, defaults to master
+            branch: # optional
+            # The folder in the Github repo that holds the source
+            folder: 
+            # The location of the Dockerfile; defaults to ./Dockerfile
+            dockerfile: # optional
+            # JSON specifying key=value pairs as as Docker build arguments
+            build_args: # optional
+          
