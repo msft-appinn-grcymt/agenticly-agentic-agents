@@ -1,3 +1,4 @@
+name: Github Agent Azure MCP Setup Steps
 on:
   workflow_dispatch:
 permissions:
