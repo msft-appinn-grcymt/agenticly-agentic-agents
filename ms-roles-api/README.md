@@ -12,12 +12,54 @@ A FastAPI-based microservice that returns employee roles based on first names or
 
 ## Employee Data
 
+**Data Storage:** Employee data is now dynamically stored in Azure Cosmos DB with automatic fallback to in-memory data for local development.
+
 The API contains the following employee mappings:
 - Mary Bina - CSA Manager
 - Vasilis Zisiadis - CSA Cloud&AI
 - Dimitris Kotanis - CSA Infra
 - Joanna Tsakona - CSAM
 - Thanasis Ragos - CSA Security
+- Konstantina Fotiadou - CSA Data&AI
+
+### Cosmos DB Integration
+
+The API uses Azure Cosmos DB for persistent storage with the following benefits:
+- **Dynamic Data**: Add/update employees without code changes
+- **High Availability**: Azure Cosmos DB SLA guarantees
+- **Performance**: Optimized indexing for fast queries
+- **Scalability**: Automatic scaling as data grows
+- **Security**: Connection via environment variables
+
+#### Configuration
+
+1. **Create `.env` file** from the template:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Configure Cosmos DB** in `.env`:
+   ```env
+   USE_COSMOS_DB=true
+   COSMOS_ENDPOINT=https://your-account.documents.azure.com:443/
+   COSMOS_KEY=your-primary-key
+   COSMOS_DATABASE_NAME=employees-db
+   COSMOS_CONTAINER_NAME=employees
+   ```
+
+3. **Seed the database** with initial employee data:
+   ```bash
+   python seed_database.py
+   ```
+
+#### Local Development Mode
+
+For local development without Cosmos DB:
+```env
+USE_COSMOS_DB=false
+```
+
+The API will automatically use in-memory fallback data with the same employee records.
 
 ## Endpoints
 
@@ -63,10 +105,23 @@ Example: `/get-role-by-surname/Kotanis`
 pip install -r requirements.txt
 ```
 
-2. Run the API:
+2. (Optional) Configure Cosmos DB:
+```bash
+cp .env.example .env
+# Edit .env with your Cosmos DB credentials
+```
+
+3. (Optional) Seed the database:
+```bash
+python seed_database.py
+```
+
+4. Run the API:
 ```bash
 python main.py
 ```
+
+The API will start on `http://localhost:8000` using either Cosmos DB or in-memory data based on your configuration.
 
 ### Using Docker
 
