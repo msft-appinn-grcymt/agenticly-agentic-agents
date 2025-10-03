@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Optional
 import uvicorn
+from cosmos_repository import employee_repository
 
 app = FastAPI(
     title="MS Roles API",
@@ -9,49 +10,8 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Centralized employee data structure
-EMPLOYEES = {
-    "mary": {
-        "first_name": "mary",
-        "last_name": "bina",
-        "full_name": "Mary Bina",
-        "role": "CSA Manager"
-    },
-    "vasilis": {
-        "first_name": "vasilis",
-        "last_name": "zisiadis",
-        "full_name": "Vasilis Zisiadis",
-        "role": "CSA Cloud&AI"
-    },
-    "dimitris": {
-        "first_name": "dimitris",
-        "last_name": "kotanis",
-        "full_name": "Dimitris Kotanis",
-        "role": "CSA Infra"
-    },
-    "joanna": {
-        "first_name": "joanna",
-        "last_name": "tsakona",
-        "full_name": "Joanna Tsakona",
-        "role": "CSAM"
-    },
-    "thanasis": {
-        "first_name": "thanasis",
-        "last_name": "ragos",
-        "full_name": "Thanasis Ragos",
-        "role": "CSA Security"
-    },
-    "konstantina": {
-        "first_name": "konstantina",
-        "last_name": "fotiadou",
-        "full_name": "Konstantina Fotiadou",
-        "role": "CSA Data&AI"
-    }
-}
-
-
-# Backward compatibility - derived from EMPLOYEES
-EMPLOYEE_ROLES = {k: v["role"] for k, v in EMPLOYEES.items()}
+# Employee data is now stored in Cosmos DB
+# The repository layer handles both Cosmos DB and fallback in-memory data
 
 class NameRequest(BaseModel):
     first_name: str
@@ -77,15 +37,13 @@ async def get_role(request: NameRequest):
     """
     Get employee role by first name
     """
-    first_name = request.first_name.lower().strip()
+    employee = employee_repository.get_employee_by_first_name(request.first_name)
     
-    if first_name not in EMPLOYEES:
+    if not employee:
         raise HTTPException(
             status_code=404, 
             detail=f"No employee found with first name: {request.first_name}"
         )
-    
-    employee = EMPLOYEES[first_name]
     
     return RoleResponse(
         first_name=request.first_name,
@@ -98,15 +56,13 @@ async def get_role_by_path(first_name: str):
     """
     Get employee role by first name (path parameter)
     """
-    first_name_lower = first_name.lower().strip()
+    employee = employee_repository.get_employee_by_first_name(first_name)
     
-    if first_name_lower not in EMPLOYEES:
+    if not employee:
         raise HTTPException(
             status_code=404,
             detail=f"No employee found with first name: {first_name}"
         )
-    
-    employee = EMPLOYEES[first_name_lower]
     
     return RoleResponse(
         first_name=first_name,
@@ -119,9 +75,10 @@ async def list_all_employees():
     """
     List all employees and their roles
     """
-    employees = []
+    all_employees = employee_repository.get_all_employees()
     
-    for employee_data in EMPLOYEES.values():
+    employees = []
+    for employee_data in all_employees:
         employees.append({
             "first_name": employee_data["first_name"].title(),
             "full_name": employee_data["full_name"],
@@ -135,30 +92,18 @@ async def get_role_by_surname(request: LastNameRequest):
     """
     Get employee role by last name
     """
-    last_name = request.last_name.lower().strip()
+    employee = employee_repository.get_employee_by_last_name(request.last_name)
     
-    if last_name not in SURNAME_TO_FIRSTNAME:
+    if not employee:
         raise HTTPException(
             status_code=404, 
             detail=f"No employee found with last name: {request.last_name}"
         )
     
-    first_name = SURNAME_TO_FIRSTNAME[last_name]
-    role = EMPLOYEE_ROLES[first_name]
-    
-    # Map back to full names for response
-    full_name_mapping = {
-        "mary": "Mary Bina",
-        "vasilis": "Vasilis Zisiadis",
-        "dimitris": "Dimitris Kotanis", 
-        "joanna": "Joanna Tsakona",
-        "thanasis": "Thanasis Ragos"
-    }
-    
     return RoleResponse(
-        first_name=first_name.title(),
-        role=role,
-        full_name=full_name_mapping[first_name]
+        first_name=employee["first_name"].title(),
+        role=employee["role"],
+        full_name=employee["full_name"]
     )
 
 @app.get("/get-role-by-surname/{last_name}", response_model=RoleResponse)
@@ -166,30 +111,18 @@ async def get_role_by_surname_path(last_name: str):
     """
     Get employee role by last name (path parameter)
     """
-    last_name_lower = last_name.lower().strip()
+    employee = employee_repository.get_employee_by_last_name(last_name)
     
-    if last_name_lower not in SURNAME_TO_FIRSTNAME:
+    if not employee:
         raise HTTPException(
             status_code=404,
             detail=f"No employee found with last name: {last_name}"
         )
     
-    first_name = SURNAME_TO_FIRSTNAME[last_name_lower]
-    role = EMPLOYEE_ROLES[first_name]
-    
-    # Map back to full names for response
-    full_name_mapping = {
-        "mary": "Mary Bina", 
-        "vasilis": "Vasilis Zisiadis",
-        "dimitris": "Dimitris Kotanis",
-        "joanna": "Joanna Tsakona", 
-        "thanasis": "Thanasis Ragos"
-    }
-    
     return RoleResponse(
-        first_name=first_name.title(),
-        role=role,
-        full_name=full_name_mapping[first_name]
+        first_name=employee["first_name"].title(),
+        role=employee["role"],
+        full_name=employee["full_name"]
     )
 
 if __name__ == "__main__":
