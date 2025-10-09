@@ -7,4 +7,17 @@ services:
       - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
+      # Cosmos DB configuration (set in .env file or override here)
+      - USE_COSMOS_DB=${USE_COSMOS_DB:-false}
+      - COSMOS_ENDPOINT=${COSMOS_ENDPOINT:-}
+      - COSMOS_KEY=${COSMOS_KEY:-}
+      - COSMOS_DATABASE_NAME=${COSMOS_DATABASE_NAME:-employees-db}
+      - COSMOS_CONTAINER_NAME=${COSMOS_CONTAINER_NAME:-employees}
+      - CACHE_TTL_SECONDS=${CACHE_TTL_SECONDS:-300}
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
