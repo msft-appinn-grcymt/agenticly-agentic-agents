@@ -9,7 +9,7 @@ function App() {
         <div className="banner-icon right">🚀</div>
       </header>
       <main className="main-content">
-        <p className="greeting">Hello there AI!!!!!!</p>
+        <p className="greeting">Hello there Boss!</p>
       </main>
     </>
   )

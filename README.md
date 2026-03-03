@@ -1,6 +1,6 @@
 # Agenticly Agentic Agents
 
-[![UI Tests](https://github.com/msft-appinn-grcymt/agenticly-agentic-agents/actions/workflows/ui-tests.yml/badge.svg)](https://github.com/msft-appinn-grcymt/agenticly-agentic-agents/actions/workflows/ui-tests.yml)
+[![Azure Static Web Apps CI/CD](https://github.com/msft-appinn-grcymt/agenticly-agentic-agents/actions/workflows/azure-static-web-apps-polite-bush-0b9eddb03.yml/badge.svg)](https://github.com/msft-appinn-grcymt/agenticly-agentic-agents/actions/workflows/azure-static-web-apps-polite-bush-0b9eddb03.yml)
 
 Featuring all the agenticly agentic features!
 
@@ -459,6 +459,7 @@ jobs:
 - **Routing Issues**: Ensure SPA fallback is configured
 - **Environment Variables**: Verify VITE_ prefix for client-side variables
 - **Dependencies**: Use `npm ci` for consistent builds instead of `npm install`
+- **Azure Marketplace Purchase Eligibility (`MarketplacePurchaseEligibilityFailed`)**: See [Azure Marketplace Troubleshooting](#azure-marketplace-troubleshooting) below
 
 #### Monitoring and Logs
 ```bash
@@ -467,6 +468,61 @@ az staticwebapp show --name agenticly-agentic-demo --resource-group agenticly-rg
 
 # Stream logs (App Service)
 az webapp log tail --name agenticly-agentic-demo --resource-group agenticly-rg
+```
+
+### Azure Marketplace Troubleshooting
+
+#### `MarketplacePurchaseEligibilityFailed` — RHEL 9 not available in your subscription region
+
+**Symptom**: When deploying Red Hat Enterprise Linux 9 (offer `rh-rhel`, plan `rh-rhel9`) from Azure Marketplace, you encounter one or both of the following:
+
+- The **EMEA image** does not have a **Create** button available.
+- The **North America / APAC / LATAM image** shows a `MarketplacePurchaseEligibilityFailed` error such as:
+  ```json
+  {
+    "code": "MarketplacePurchaseEligibilityFailed",
+    "details": [{
+      "code": "BadRequest",
+      "message": "The Publisher: 'redhat' does not make available Offer: 'rh-rhel', Plan: 'rh-rhel9' in your Subscription/Azure account's region: 'GR'."
+    }]
+  }
+  ```
+
+**Root Cause**: The Red Hat RHEL 9 paid marketplace offer (`rh-rhel` / `rh-rhel9`) is not available for purchase by Azure subscriptions whose **billing account region** is **Greece (GR)**. Azure Marketplace offer availability is determined by the subscription's billing region, not the Azure deployment region.
+
+**Resolution Options**:
+
+1. **Open an Azure Support Request** *(Recommended)*
+   - Go to [Azure Portal → Help + Support → New Support Request](https://portal.azure.com/#blade/Microsoft_Azure_Support/HelpAndSupportBlade/newsupportrequest)
+   - Select **Billing** as the issue type
+   - Request that the Red Hat RHEL 9 offer (`rh-rhel` / `rh-rhel9`) be enabled for your subscription's GR billing region
+   - Reference Correlation ID from the error message when filing the ticket
+
+2. **Use RHEL BYOS (Bring Your Own Subscription)**
+   - Search Azure Marketplace for **Red Hat Enterprise Linux (BYOS)** images
+   - BYOS images do not require a marketplace purchase agreement through Azure, so they are not subject to the same regional eligibility restrictions
+   - You will need an active Red Hat subscription to register and use the BYOS image
+
+3. **Check Subscription Marketplace Policies**
+   - In Azure Portal, navigate to **Subscriptions → your subscription → Policies**
+   - Verify that Azure Marketplace purchases are not blocked at the subscription or management group level
+   - If your organization uses Azure Policy to restrict marketplace offers, work with your Azure administrator to allow the Red Hat offer
+
+4. **Work with your Microsoft Account Team**
+   - If you have an **Enterprise Agreement (EA)** or **Cloud Solution Provider (CSP)** subscription, contact your Microsoft account representative
+   - EA and CSP channels may have different marketplace access options for specific regions
+
+5. **Alternative Linux Distributions**
+   - If RHEL 9 is not critical, consider marketplace images that are available in the GR region:
+     - **AlmaLinux** — RHEL-compatible, free, available in all Azure regions
+     - **Rocky Linux** — RHEL-compatible, free, available in all Azure regions
+     - **Oracle Linux** — RHEL-compatible, available through Azure Marketplace
+   - These distributions are binary-compatible with RHEL and can run most RHEL workloads without modification
+
+**Verification**:
+After resolving access, verify Marketplace eligibility with Azure CLI:
+```bash
+az vm image list --publisher RedHat --offer rh-rhel --sku rh-rhel9 --all --output table
 ```
 
 ### Additional Resources
